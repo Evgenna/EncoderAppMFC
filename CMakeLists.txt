@@ -1,16 +1,16 @@
-cmake_minimum_required(VERSION 3.10)
+п»їcmake_minimum_required(VERSION 3.10)
 
-# Задаем название проекта
+# Р—Р°РґР°РµРј РЅР°Р·РІР°РЅРёРµ РїСЂРѕРµРєС‚Р°
 project(EncoderApp)
 
-# Указываем стандарт C++
+# РЈРєР°Р·С‹РІР°РµРј СЃС‚Р°РЅРґР°СЂС‚ C++
 set(CMAKE_CXX_STANDARD 14)
 
-# Определяем макрос для поддержки MFC
+# РћРїСЂРµРґРµР»СЏРµРј РјР°РєСЂРѕСЃ РґР»СЏ РїРѕРґРґРµСЂР¶РєРё MFC
 add_definitions(-D_AFXDLL)
 set(CMAKE_MFC_FLAG 1)
 
-# Укажите исходные файлы
+# РЈРєР°Р¶РёС‚Рµ РёСЃС…РѕРґРЅС‹Рµ С„Р°Р№Р»С‹
 set(SOURCES
     ../EncoderApp/EncoderController.cpp
     ../EncoderApp/EncoderController.h
@@ -27,17 +27,17 @@ set(SOURCES
     ../EncoderApp/EncoderApp.rc
 )
 
-# Укажите исполняемый файл
+# РЈРєР°Р¶РёС‚Рµ РёСЃРїРѕР»РЅСЏРµРјС‹Р№ С„Р°Р№Р»
 add_executable(EncoderApp WIN32 ${SOURCES})
 
-# Указываем, что это Windows-приложение и, при необходимости, используем статическую библиотеку MFC
+# РЈРєР°Р·С‹РІР°РµРј, С‡С‚Рѕ СЌС‚Рѕ Windows-РїСЂРёР»РѕР¶РµРЅРёРµ Рё, РїСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё, РёСЃРїРѕР»СЊР·СѓРµРј СЃС‚Р°С‚РёС‡РµСЃРєСѓСЋ Р±РёР±Р»РёРѕС‚РµРєСѓ MFC
 set_target_properties(EncoderApp PROPERTIES
     WIN32_EXECUTABLE TRUE
-    MFC_USE_STATIC TRUE  # Использовать статическую библиотеку MFC (по желанию)
+    MFC_USE_STATIC TRUE  # РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЃС‚Р°С‚РёС‡РµСЃРєСѓСЋ Р±РёР±Р»РёРѕС‚РµРєСѓ MFC (РїРѕ Р¶РµР»Р°РЅРёСЋ)
 )
 
-# Присоедините MFC (здесь можно использовать target_link_libraries, если необходимо)
+# РџСЂРёСЃРѕРµРґРёРЅРёС‚Рµ MFC (Р·РґРµСЃСЊ РјРѕР¶РЅРѕ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ target_link_libraries, РµСЃР»Рё РЅРµРѕР±С…РѕРґРёРјРѕ)
 target_link_libraries(EncoderApp PRIVATE ${MFC_LIBRARIES})
 
-# Если вы используете ресурсы, убедитесь, что CMake знает о файле ресурсов
+# Р•СЃР»Рё РІС‹ РёСЃРїРѕР»СЊР·СѓРµС‚Рµ СЂРµСЃСѓСЂСЃС‹, СѓР±РµРґРёС‚РµСЃСЊ, С‡С‚Рѕ CMake Р·РЅР°РµС‚ Рѕ С„Р°Р№Р»Рµ СЂРµСЃСѓСЂСЃРѕРІ
 set_source_files_properties(../EncoderApp.rc PROPERTIES LANGUAGE RC)
