@@ -5,8 +5,10 @@
 #include <string>
 #include <stdexcept>
 
+// Конструктор контроллера. Связывает контекст шифрования и пользовательский интерфейс.
 EncoderController::EncoderController(EncoderContext* ctx, CEncoderAppDlg* dlg) : context(ctx), view(dlg) {}
 
+// Возвращает идентификатор языка по строке выбранного языка.
 std::string EncoderController::GetLanguageId(std::string& language)
 {
     if (language == "Русский язык") return "ru";
@@ -14,6 +16,7 @@ std::string EncoderController::GetLanguageId(std::string& language)
     throw std::invalid_argument("Выбран неподдерживаемый язык");
 }
 
+// Устанавливает шифратор в контексте на основе выбранного алгоритма и языка.
 void EncoderController::SetEncoderContext(std::string& cipher, std::string& language)
 {
     EncoderFactory factory;
@@ -39,9 +42,12 @@ void EncoderController::SetEncoderContext(std::string& cipher, std::string& lang
         context->setEncoder(factory.createVigenereEncoder(inputKey, languageId));
         return;
     }
+    throw std::invalid_argument("Неподдерживаемый шифр");
     
 }
 
+// Обработчик события нажатия на кнопку "Рассчитать".
+// Выполняет шифрование и расшифровку в зависимости от выбранного режима.
 void EncoderController::OnEncodeButtonClicked()
 {
     std::string inputMessage = view->GetInputMessage();

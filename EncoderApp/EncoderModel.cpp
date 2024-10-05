@@ -1,16 +1,20 @@
 #include "pch.h"
 #include "EncoderModel.h"
 
+
+// Кодирует сообщение с помощью шифра Цезаря.
 std::string CaesarEncoder::encode(const std::string& message) const
 {
 	return transform(message, _shift);
 }
 
+// Расшифровывает сообщение с помощью шифра Цезаря.
 std::string CaesarEncoder::decode(const std::string& message) const
 {
 	return transform(message, -_shift);
 }
 
+// Преобразует сообщение с использованием сдвига (кодирование, декодирование).
 std::string CaesarEncoder::transform(const std::string& message, int shift) const
 {
 	std::string encodedMessage;
@@ -27,16 +31,19 @@ std::string CaesarEncoder::transform(const std::string& message, int shift) cons
 	return encodedMessage;
 }
 
+// Кодирует сообщение с помощью шифра Виженера.
 std::string VigenereEncoder::encode(const std::string& message) const
 {
 	return transform(message, true);
 }
 
+// Расшифровывает сообщение с помощью шифра Виженера.
 std::string VigenereEncoder::decode(const std::string& message) const
 {
 	return transform(message, false);
 }
 
+// Преобразует сообщение с помощью шифра Виженера.
 std::string VigenereEncoder::transform(const std::string& message, bool encrypt) const
 {
 	std::string result;
@@ -64,16 +71,19 @@ std::string VigenereEncoder::transform(const std::string& message, bool encrypt)
 	return result;
 }
 
+// Кодирует сообщение с помощью шифра Вернама.
 std::string VernamEncoder::encode(const std::string& message) const
 {
 	return transform(message, true);
 }
 
+// Расшифровывает сообщение с помощью шифра Вернама.
 std::string VernamEncoder::decode(const std::string& message) const
 {
 	return transform(message, false);
 }
 
+// Преобразует сообщение с помощью шифра Вернама.
 std::string VernamEncoder::transform(const std::string& message, bool encrypt) const
 {
 	std::string result;
@@ -94,11 +104,13 @@ std::string VernamEncoder::transform(const std::string& message, bool encrypt) c
 	return result;
 }
 
+// Устанавливает текущий шифратор в контексте.
 void EncoderContext::setEncoder(std::unique_ptr<IEncoder> encoder)
 {
 	_encoder = std::move(encoder);
 }
 
+// Шифрует сообщение с помощью текущего шифратора в контексте.
 std::string EncoderContext::encodeMessage(const std::string& message)
 {
 	if (_encoder) {
@@ -107,6 +119,7 @@ std::string EncoderContext::encodeMessage(const std::string& message)
 	throw std::runtime_error("Шифратор не установлен");
 }
 
+// Расшифровывает сообщение с помощью текущего шифратора в контексте.
 std::string EncoderContext::decodeMessage(const std::string& message)
 {
 	if (_encoder) {
@@ -115,22 +128,26 @@ std::string EncoderContext::decodeMessage(const std::string& message)
 	throw std::runtime_error("Шифратор не установлен");
 }
 
+// Создает шифратор Цезаря с указанным сдвигом и алфавитом.
 std::unique_ptr<IEncoder> EncoderFactory::createCaesarEncoder(int shift, const std::string& language)
 {
 	return std::make_unique<CaesarEncoder>(shift, GetAlphabet(language));
 }
 
+// Создает шифратор Виженера с указанным ключем и алфавитом.
 std::unique_ptr<IEncoder> EncoderFactory::createVigenereEncoder(const std::string& key, const std::string& language)
 {
 	return std::make_unique<VigenereEncoder>(key, GetAlphabet(language));
 }
 
+// Создает шифратор Вернама с указанным ключем и алфавитом.
 std::unique_ptr<IEncoder> EncoderFactory::createVernamEncoder(const std::string& key, const std::string& language)
 {
 	
 	return std::make_unique<VernamEncoder>(key, GetAlphabet(language));
 }
 
+// Возвращает алфавит в зависимости от выбранного языка.
 std::string EncoderFactory::GetAlphabet(const std::string& language)
 {
 	std::string alphabet;

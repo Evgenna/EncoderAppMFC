@@ -77,7 +77,7 @@ BEGIN_MESSAGE_MAP(CEncoderAppDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_WM_GETMINMAXINFO()
-	ON_BN_CLICKED(IDC_BUTTON1, &CEncoderAppDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON1, &CEncoderAppDlg::OnProcessingButtonClicked)
 END_MESSAGE_MAP()
 
 
@@ -119,7 +119,7 @@ BOOL CEncoderAppDlg::OnInitDialog()
 	SetLanguageList(); // Инициализация списка языков
 	m_encodeRadio.SetCheck(1); // Установка значеня 1 для CheckBox по умолчанию
 
-	context = std::make_unique<EncoderContext>(); //
+	context = std::make_unique<EncoderContext>(); // Инициализация указателя на контекст модуля шифратора
 
 	return TRUE;  // возврат значения TRUE, если фокус не передан элементу управления
 }
@@ -183,20 +183,25 @@ void CEncoderAppDlg::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI)
 	lpMMI->ptMaxTrackSize.y = 1000;
 }
 
-void CEncoderAppDlg::OnBnClickedButton1()
+// Обработчик нажатия кнопки для шифрования/дешифрования.
+// Выполняет проверку заполнения полей и вызывает метод контроллера для обработки.
+void CEncoderAppDlg::OnProcessingButtonClicked()
 {
 	try {
-		IsFieldNotEmpty();
+		IsFieldNotEmpty(); // Проверяет заполнение всех необходимых полей
+
+		// Инициализация контроллера и вызов функции обработки
 		EncoderController controller(context.get(), this);
 		controller.OnEncodeButtonClicked();
 	}
 	catch (std::exception ex) {
-		AfxMessageBox((CString)(ex.what()));
+		AfxMessageBox((CString)(ex.what())); // Выводит сообщение об ошибке
 		return;
 	}
 }
 
-
+// Добавляет доступные шифры в выпадающий список m_cipherCombobox.
+// Устанавливает первый шифр (по умолчанию "Шифр Цезаря").
 void CEncoderAppDlg::SetCipherList()
 {
 	m_cipherCombobox.AddString(_T("Шифр Цезаря"));
@@ -205,6 +210,8 @@ void CEncoderAppDlg::SetCipherList()
 	m_cipherCombobox.SetCurSel(0);
 }
 
+// Добавляет доступные языки в выпадающий список m_languageCombobox.
+// Устанавливает первый язык (по умолчанию "Русский язык").
 void CEncoderAppDlg::SetLanguageList()
 {
 	m_langCombobox.AddString(_T("Английский язык"));
@@ -212,6 +219,7 @@ void CEncoderAppDlg::SetLanguageList()
 	m_langCombobox.SetCurSel(1);
 }
 
+// Проверка на то, что все необходимые поля заполнены.
 bool CEncoderAppDlg::IsFieldNotEmpty()
 {
 	CString message, key;
@@ -227,8 +235,7 @@ bool CEncoderAppDlg::IsFieldNotEmpty()
 	return true;
 }
 
-// Система ввода и вывода текста в элементы управления
-
+// Возвращает введенное пользователем сообщение из текстового поля.
 const std::string CEncoderAppDlg::GetInputMessage()
 {
 	CString inputMessage;
@@ -236,6 +243,7 @@ const std::string CEncoderAppDlg::GetInputMessage()
 	return std::string(CT2A(inputMessage));
 }
 
+// Возвращает введенный пользователем ключ из текстового поля.
 const std::string CEncoderAppDlg::GetInputKey()
 {
 	CString inputKey;
@@ -243,6 +251,7 @@ const std::string CEncoderAppDlg::GetInputKey()
 	return std::string(CT2A(inputKey));
 }
 
+// Возвращает выбранный пользователем язык из выпадающего списка.
 std::string CEncoderAppDlg::GetSelectedLanguage()
 {
 	CString selectedLanguage;
@@ -250,6 +259,7 @@ std::string CEncoderAppDlg::GetSelectedLanguage()
 	return std::string(CT2A(selectedLanguage));
 }
 
+// Возвращает выбранный пользователем шифр из выпадающего списка.
 const std::string CEncoderAppDlg::GetSelectedCipher()
 {
 	CString selectedCipher;
@@ -257,16 +267,19 @@ const std::string CEncoderAppDlg::GetSelectedCipher()
 	return std::string(CT2A(selectedCipher));
 }
 
+// Проверяет, выбрано ли действие "Зашифровать" (RadioButton для кодирования).
 const bool CEncoderAppDlg::IsEncoderSelected()
 {
 	return m_encodeRadio.GetCheck() == BST_CHECKED;
 }
 
+// Проверяет, выбрано ли действие "Расшифровать" (RadioButton для раскодирования).
 const bool CEncoderAppDlg::IsDecoderSelected()
 {
 	return m_decodeRadio.GetCheck() == BST_CHECKED;
 }
 
+// Устанавливает результат шифрования/дешифрования в текстовое поле вывода.
 void CEncoderAppDlg::SetOutputMessage(const std::string& outputMessage)
 {
 	m_outputMessage_edit.SetWindowTextW(CString(outputMessage.c_str()));

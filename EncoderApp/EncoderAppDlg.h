@@ -43,7 +43,7 @@ public:
 	CEdit m_outputMessage_edit;
 	CButton m_coderButton;
 
-	afx_msg void OnBnClickedButton1();
+	afx_msg void OnProcessingButtonClicked();
 
 	const std::string GetInputMessage();
 	const std::string GetInputKey();
