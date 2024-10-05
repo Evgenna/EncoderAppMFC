@@ -78,6 +78,8 @@ BEGIN_MESSAGE_MAP(CEncoderAppDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_WM_GETMINMAXINFO()
 	ON_BN_CLICKED(IDC_BUTTON1, &CEncoderAppDlg::OnProcessingButtonClicked)
+	ON_CBN_SELCHANGE(IDC_CIPHER_COMBOBOX, &CEncoderAppDlg::OnSelchangeCipherCombobox)
+	ON_CBN_SELCHANGE(IDC_LANGUAGESET_COMBOBOX, &CEncoderAppDlg::OnSelchangeLanguagesetCombobox)
 END_MESSAGE_MAP()
 
 
@@ -113,7 +115,9 @@ BOOL CEncoderAppDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Мелкий значок
 
 	// TODO: добавьте дополнительную инициализацию
+	m_inputKey_edit.ModifyStyle(0, ES_NUMBER);
 
+	SetToolTip();
 	
 	SetCipherList(); // Инициализация списка шифров
 	SetLanguageList(); // Инициализация списка языков
@@ -283,4 +287,80 @@ const bool CEncoderAppDlg::IsDecoderSelected()
 void CEncoderAppDlg::SetOutputMessage(const std::string& outputMessage)
 {
 	m_outputMessage_edit.SetWindowText(CString(outputMessage.c_str()));
+}
+
+void CEncoderAppDlg::SetToolTip() {
+	m_toolTip.Create(this);
+
+	m_toolTip.AddTool(GetDlgItem(IDC_INPUT_EDIT), _T("Введите текст сообщения, которое хотите зашифровать (На русском)"));
+	m_toolTip.AddTool(GetDlgItem(IDC_KEY_EDIT), _T("Введите ключ для шифрования (Число)"));
+	m_toolTip.AddTool(GetDlgItem(IDC_OUTPUT_EDIT), _T("Здесь будет зашифрованное сообщение"));
+
+	m_toolTip.Activate(TRUE);
+
+	m_toolTip.SetDelayTime(TTDT_INITIAL, 1000);
+	m_toolTip.SetDelayTime(TTDT_AUTOPOP, 10000);
+}
+
+BOOL CEncoderAppDlg::PreTranslateMessage(MSG* pMsg)
+{
+	if (m_toolTip.m_hWnd != NULL)
+	{
+		m_toolTip.RelayEvent(pMsg); // Передача событий подсказкам
+	}
+	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+// Меняет подсказки для поля ввода с ключем в зависимости от выбора алгоритма шифрования.
+void CEncoderAppDlg::OnSelchangeCipherCombobox()
+{
+	int nSel = m_cipherCombobox.GetCurSel();
+	if (nSel != CB_ERR)
+	{
+		CString strSelectedText;
+		m_cipherCombobox.GetLBText(nSel, strSelectedText);
+
+		if (strSelectedText == "Шифр Цезаря") {
+			m_toolTip.UpdateTipText(_T("Введите ключ для шифрования (Число)"), GetDlgItem(IDC_KEY_EDIT));
+			m_inputKey_edit.SetWindowText(_T(""));
+			m_inputKey_edit.ModifyStyle(0, ES_NUMBER);
+			return;
+		}
+		if (strSelectedText == "Шифр Виженера") {
+			m_toolTip.UpdateTipText(_T("Введите ключ для шифрования (Текст)"), GetDlgItem(IDC_KEY_EDIT));
+			m_inputKey_edit.SetWindowText(_T(""));
+			m_inputKey_edit.ModifyStyle(ES_NUMBER, 0);
+			return;
+		}
+		if (strSelectedText == "Шифр Вернама") {
+			m_toolTip.UpdateTipText(_T("Введите ключ для шифрования (Текст)"), GetDlgItem(IDC_KEY_EDIT));
+			m_inputKey_edit.SetWindowText(_T(""));
+			m_inputKey_edit.ModifyStyle(ES_NUMBER, 0);
+			return;
+		}
+	}
+}
+
+
+void CEncoderAppDlg::OnSelchangeLanguagesetCombobox()
+{
+	int nSel = m_langCombobox.GetCurSel();
+	if (nSel != CB_ERR)
+	{
+		CString strSelectedText;
+		m_langCombobox.GetLBText(nSel, strSelectedText);
+
+		if (strSelectedText == "Русский язык") {
+			m_toolTip.UpdateTipText(_T("Введите текст сообщения, которое хотите зашифровать (На русском)"), GetDlgItem(IDC_INPUT_EDIT));
+			m_inputKey_edit.SetWindowText(_T(""));
+			m_inputKey_edit.ModifyStyle(0, ES_NUMBER);
+			return;
+		}
+		if (strSelectedText == "Английский язык") {
+			m_toolTip.UpdateTipText(_T("Введите текст сообщения, которое хотите зашифровать (На английском)"), GetDlgItem(IDC_INPUT_EDIT));
+			m_inputMessage_edit.SetWindowText(_T(""));
+			m_inputMessage_edit.ModifyStyle(ES_NUMBER, 0);
+			return;
+		}
+	}
 }

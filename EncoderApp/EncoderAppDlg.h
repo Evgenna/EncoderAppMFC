@@ -55,11 +55,19 @@ public:
 
 	void SetOutputMessage(const std::string& outputMessage);
 
+	BOOL PreTranslateMessage(MSG* pMsg);
+
 	std::unique_ptr<EncoderContext> context;
 
 private:
 	void SetCipherList();
 	void SetLanguageList();
+	void SetToolTip();
 
 	bool IsFieldNotEmpty();
+protected:
+	CToolTipCtrl m_toolTip;
+public:
+	afx_msg void OnSelchangeCipherCombobox();
+	afx_msg void OnSelchangeLanguagesetCombobox();
 };
