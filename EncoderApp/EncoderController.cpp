@@ -1,53 +1,53 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "EncoderController.h"
 #include "afxwin.h"
 #include <iostream>
 #include <string>
 #include <stdexcept>
 
-// Êîíñòðóêòîð êîíòðîëëåðà. Ñâÿçûâàåò êîíòåêñò øèôðîâàíèÿ è ïîëüçîâàòåëüñêèé èíòåðôåéñ.
+// ÐšÐ¾Ð½ÑÑ‚Ñ€ÑƒÐºÑ‚Ð¾Ñ€ ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»Ð»ÐµÑ€Ð°. Ð¡Ð²ÑÐ·Ñ‹Ð²Ð°ÐµÑ‚ ÐºÐ¾Ð½Ñ‚ÐµÐºÑÑ‚ ÑˆÐ¸Ñ„Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ Ð¸ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒÑÐºÐ¸Ð¹ Ð¸Ð½Ñ‚ÐµÑ€Ñ„ÐµÐ¹Ñ.
 EncoderController::EncoderController(EncoderContext* ctx, CEncoderAppDlg* dlg) : context(ctx), view(dlg) {}
 
-// Âîçâðàùàåò èäåíòèôèêàòîð ÿçûêà ïî ñòðîêå âûáðàííîãî ÿçûêà.
+// Ð’Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÑ‚ Ð¸Ð´ÐµÐ½Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ‚Ð¾Ñ€ ÑÐ·Ñ‹ÐºÐ° Ð¿Ð¾ ÑÑ‚Ñ€Ð¾ÐºÐµ Ð²Ñ‹Ð±Ñ€Ð°Ð½Ð½Ð¾Ð³Ð¾ ÑÐ·Ñ‹ÐºÐ°.
 std::string EncoderController::GetLanguageId(std::string& language)
 {
-    if (language == "Ðóññêèé ÿçûê") return "ru";
-    if (language == "Àíãëèéñêèé ÿçûê") return "en";
-    throw std::invalid_argument("Âûáðàí íåïîääåðæèâàåìûé ÿçûê");
+    if (language == "Ð ÑƒÑÑÐºÐ¸Ð¹ ÑÐ·Ñ‹Ðº") return "ru";
+    if (language == "ÐÐ½Ð³Ð»Ð¸Ð¹ÑÐºÐ¸Ð¹ ÑÐ·Ñ‹Ðº") return "en";
+    throw std::invalid_argument("Ð’Ñ‹Ð±Ñ€Ð°Ð½ Ð½ÐµÐ¿Ð¾Ð´Ð´ÐµÑ€Ð¶Ð¸Ð²Ð°ÐµÐ¼Ñ‹Ð¹ ÑÐ·Ñ‹Ðº");
 }
 
-// Óñòàíàâëèâàåò øèôðàòîð â êîíòåêñòå íà îñíîâå âûáðàííîãî àëãîðèòìà è ÿçûêà.
+// Ð£ÑÑ‚Ð°Ð½Ð°Ð²Ð»Ð¸Ð²Ð°ÐµÑ‚ ÑˆÐ¸Ñ„Ñ€Ð°Ñ‚Ð¾Ñ€ Ð² ÐºÐ¾Ð½Ñ‚ÐµÐºÑÑ‚Ðµ Ð½Ð° Ð¾ÑÐ½Ð¾Ð²Ðµ Ð²Ñ‹Ð±Ñ€Ð°Ð½Ð½Ð¾Ð³Ð¾ Ð°Ð»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼Ð° Ð¸ ÑÐ·Ñ‹ÐºÐ°.
 void EncoderController::SetEncoderContext(std::string& cipher, std::string& language)
 {
     EncoderFactory factory;
     std::string languageId = GetLanguageId(language);
-    if (cipher == "Øèôð Öåçàðÿ") {
+    if (cipher == "Ð¨Ð¸Ñ„Ñ€ Ð¦ÐµÐ·Ð°Ñ€Ñ") {
         int inputKey;
         try {
             inputKey = stoi(view->GetInputKey());
         }
         catch (std::exception ex) {
-            throw std::invalid_argument("Êëþ÷ äîëæåí áûòü öåëûì ÷èñëîì");
+            throw std::invalid_argument("ÐšÐ»ÑŽÑ‡ Ð´Ð¾Ð»Ð¶ÐµÐ½ Ð±Ñ‹Ñ‚ÑŒ Ñ†ÐµÐ»Ñ‹Ð¼ Ñ‡Ð¸ÑÐ»Ð¾Ð¼");
         }
         context->setEncoder(factory.createCaesarEncoder(inputKey, languageId));
         return;
     }
-    if (cipher == "Øèôð Âåðíàìà") {
+    if (cipher == "Ð¨Ð¸Ñ„Ñ€ Ð’ÐµÑ€Ð½Ð°Ð¼Ð°") {
         std::string inputKey = view->GetInputKey();
         context->setEncoder(factory.createVernamEncoder(inputKey, languageId));
         return;
     }
-    if (cipher == "Øèôð Âèæåíåðà") {
+    if (cipher == "Ð¨Ð¸Ñ„Ñ€ Ð’Ð¸Ð¶ÐµÐ½ÐµÑ€Ð°") {
         std::string inputKey = view->GetInputKey();
         context->setEncoder(factory.createVigenereEncoder(inputKey, languageId));
         return;
     }
-    throw std::invalid_argument("Íåïîääåðæèâàåìûé øèôð");
+    throw std::invalid_argument("ÐÐµÐ¿Ð¾Ð´Ð´ÐµÑ€Ð¶Ð¸Ð²Ð°ÐµÐ¼Ñ‹Ð¹ ÑˆÐ¸Ñ„Ñ€");
     
 }
 
-// Îáðàáîò÷èê ñîáûòèÿ íàæàòèÿ íà êíîïêó "Ðàññ÷èòàòü".
-// Âûïîëíÿåò øèôðîâàíèå è ðàñøèôðîâêó â çàâèñèìîñòè îò âûáðàííîãî ðåæèìà.
+// ÐžÐ±Ñ€Ð°Ð±Ð¾Ñ‚Ñ‡Ð¸Ðº ÑÐ¾Ð±Ñ‹Ñ‚Ð¸Ñ Ð½Ð°Ð¶Ð°Ñ‚Ð¸Ñ Ð½Ð° ÐºÐ½Ð¾Ð¿ÐºÑƒ "Ð Ð°ÑÑÑ‡Ð¸Ñ‚Ð°Ñ‚ÑŒ".
+// Ð’Ñ‹Ð¿Ð¾Ð»Ð½ÑÐµÑ‚ ÑˆÐ¸Ñ„Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ Ð¸ Ñ€Ð°ÑÑˆÐ¸Ñ„Ñ€Ð¾Ð²ÐºÑƒ Ð² Ð·Ð°Ð²Ð¸ÑÐ¸Ð¼Ð¾ÑÑ‚Ð¸ Ð¾Ñ‚ Ð²Ñ‹Ð±Ñ€Ð°Ð½Ð½Ð¾Ð³Ð¾ Ñ€ÐµÐ¶Ð¸Ð¼Ð°.
 void EncoderController::OnEncodeButtonClicked()
 {
     std::string inputMessage = view->GetInputMessage();

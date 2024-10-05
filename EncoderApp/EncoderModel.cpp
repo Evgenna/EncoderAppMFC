@@ -1,21 +1,19 @@
-#include "pch.h"
-#include "afxwin.h"
+п»ї#include "pch.h"
 #include "EncoderModel.h"
 
-
-// Кодирует сообщение с помощью шифра Цезаря.
+// РљРѕРґРёСЂРѕРІР°РЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ СЃ РїРѕРјРѕС‰СЊСЋ РЁРёС„СЂР° Р¦РµР·Р°СЂСЏ. 
 std::string CaesarEncoder::encode(const std::string& message) const
 {
 	return transform(message, _shift);
 }
 
-// Расшифровывает сообщение с помощью шифра Цезаря.
+// Р Р°СЃС€РёС„СЂРѕРІРєР° СЃРѕРѕР±С‰РµРЅРёСЏ СЃ РїРѕРјРѕС‰СЊСЋ РЁРёС„СЂР° Р¦РµР·Р°СЂСЏ.
 std::string CaesarEncoder::decode(const std::string& message) const
 {
 	return transform(message, -_shift);
 }
 
-// Преобразует сообщение с использованием сдвига (кодирование, декодирование).
+// РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј СЃРґРІРёРіР° (РљРѕРґРёСЂРѕРІР°РЅРёРµ Рё РґРµРєРѕРґРёСЂРѕРІР°РЅРёРµ).
 std::string CaesarEncoder::transform(const std::string& message, int shift) const
 {
 	std::string encodedMessage;
@@ -32,19 +30,19 @@ std::string CaesarEncoder::transform(const std::string& message, int shift) cons
 	return encodedMessage;
 }
 
-// Кодирует сообщение с помощью шифра Виженера.
+// РљРѕРґРёСЂРѕРІР°РЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј РЁРёС„СЂР° Р’РёР¶РµРЅРµСЂР°.
 std::string VigenereEncoder::encode(const std::string& message) const
 {
 	return transform(message, true);
 }
 
-// Расшифровывает сообщение с помощью шифра Виженера.
+// Р Р°СЃС€РёС„СЂРѕРІРєР° СЃРѕРѕР±С‰РµРЅРёСЏ СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј РЁРёС„СЂР° Р’РёР¶РµРЅРµСЂР°.
 std::string VigenereEncoder::decode(const std::string& message) const
 {
 	return transform(message, false);
 }
 
-// Преобразует сообщение с помощью шифра Виженера.
+// РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ СЃ РїРѕРјРѕС‰СЊСЋ РЁРёС„СЂР° Р’РёР¶РµРЅРµСЂР°.
 std::string VigenereEncoder::transform(const std::string& message, bool encrypt) const
 {
 	std::string result;
@@ -53,102 +51,96 @@ std::string VigenereEncoder::transform(const std::string& message, bool encrypt)
 		char c = message[i];
 		auto it_c = _alphabet.find(c);
 		if (it_c != std::string::npos) {
-			// Находим символ ключа
 			auto it_k = _alphabet.find(_key[i % _key_length]);
 
-			// Если шифруем, добавляем смещение, если расшифровываем — вычитаем
-			// Приводим it_k к int для корректной работы с отрицательными значениями
+			
 			int shift = encrypt ? static_cast<int>(it_k) : -static_cast<int>(it_k);
 
-			// Вычисляем новую позицию с учетом длины алфавита
+			
 			size_t pos = (it_c + shift + _alphabet.size()) % _alphabet.size();
 			result += _alphabet[pos];
 		}
 		else {
-			// Если символ не найден в алфавите, просто добавляем его в результат
 			result += c;
 		}
 	}
 	return result;
 }
 
-// Кодирует сообщение с помощью шифра Вернама.
+// РљРѕРґРёСЂРѕРІР°РЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ СЃ РїРѕРјРѕС‰СЊСЋ С€РёС„СЂР° Р’РµСЂРЅР°РјР°.
 std::string VernamEncoder::encode(const std::string& message) const
 {
 	return transform(message, true);
 }
 
-// Расшифровывает сообщение с помощью шифра Вернама.
+// Р Р°СЃС€РёС„СЂРѕРІРєР° СЃРѕРѕР±С‰РµРЅРёСЏ СЃ РїРѕРјРѕС‰СЊСЋ С€РёС„СЂР° Р’РµСЂРЅР°РјР°.
 std::string VernamEncoder::decode(const std::string& message) const
 {
 	return transform(message, false);
 }
 
-// Преобразует сообщение с помощью шифра Вернама.
+// РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ СЃ РїРѕРјРѕС‰СЊСЋ С€РёС„СЂР° Р’РµСЂРЅР°РјР°.
 std::string VernamEncoder::transform(const std::string& message, bool encrypt) const
 {
 	std::string result;
 	size_t alphabetSize = _alphabet.size();
 
 	for (size_t i = 0; i < message.length(); ++i) {
-		// Находим индекс символа в алфавите для текста и ключа
 		size_t textIndex = _alphabet.find(message[i]);
 		size_t keyIndex = _alphabet.find(_key[i % _key.length()]);
 
-		// Выполняем операцию XOR над индексами и берем результат по модулю размера алфавита
 		size_t cipherIndex = (textIndex ^ keyIndex) % alphabetSize;
 
-		// Добавляем зашифрованный (или расшифрованный) символ в результат
 		result += _alphabet[cipherIndex];
 	}
 
 	return result;
 }
 
-// Устанавливает текущий шифратор в контексте.
+// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С‚РµРєСѓС‰РёР№ С€РёС„СЂР°С‚РѕСЂ РІ РєРѕРЅС‚РµРєСЃС‚Рµ.
 void EncoderContext::setEncoder(std::unique_ptr<IEncoder> encoder)
 {
 	_encoder = std::move(encoder);
 }
 
-// Шифрует сообщение с помощью текущего шифратора в контексте.
+// РЁРёС„СЂСѓРµС‚ СЃРѕРѕР±С‰РµРЅРёРµ СЃ РїРѕРјРѕС‰СЊСЋ С‚РµРєСѓС‰РµРіРѕ С€РёС„СЂР°С‚РѕСЂР° РІ РєРѕРЅС‚РµРєСЃС‚Рµ.
 std::string EncoderContext::encodeMessage(const std::string& message)
 {
 	if (_encoder) {
 		return _encoder->encode(message);
 	}
-	throw std::runtime_error("Шифратор не установлен");
+	throw std::runtime_error("РЁРёС„СЂР°С‚РѕСЂ РЅРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅ");
 }
 
-// Расшифровывает сообщение с помощью текущего шифратора в контексте.
+// Р Р°СЃС€РёС„СЂРѕРІС‹РІР°РµС‚ СЃРѕРѕР±С‰РµРЅРёРµ СЃ РїРѕРјРѕС‰СЊСЋ С‚РµРєСѓС‰РµРіРѕ С€РёС„СЂР°С‚РѕСЂР° РІ РєРѕРЅС‚РµРєСЃС‚Рµ.
 std::string EncoderContext::decodeMessage(const std::string& message)
 {
 	if (_encoder) {
 		return _encoder->decode(message);
 	}
-	throw std::runtime_error("Шифратор не установлен");
+	throw std::runtime_error("РЁРёС„СЂР°С‚РѕСЂ РЅРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅ");
 }
 
-// Создает шифратор Цезаря с указанным сдвигом и алфавитом.
+// РЎРѕР·РґР°РµС‚ С€РёС„СЂР°С‚РѕСЂ Р¦РµР·Р°СЂСЏ СЃ СѓРєР°Р·Р°РЅРЅС‹Рј СЃРґРІРёРіРѕРј Рё Р°Р»С„Р°РІРёС‚РѕРј.
 std::unique_ptr<IEncoder> EncoderFactory::createCaesarEncoder(int shift, const std::string& language)
 {
 	return std::make_unique<CaesarEncoder>(shift, GetAlphabet(language));
 }
 
-// Создает шифратор Виженера с указанным ключем и алфавитом.
+// РЎРѕР·РґР°РµС‚ С€РёС„СЂР°С‚РѕСЂ Р’РёР¶РµРЅРµСЂР° СЃ СѓРєР°Р·Р°РЅРЅС‹Рј РєР»СЋС‡РѕРј Рё Р°Р»С„Р°РІРёС‚РѕРј.
 std::unique_ptr<IEncoder> EncoderFactory::createVigenereEncoder(const std::string& key, const std::string& language)
 {
 	return std::make_unique<VigenereEncoder>(key, GetAlphabet(language));
 }
 
-// Создает шифратор Вернама с указанным ключем и алфавитом.
+// РЎРѕР·РґР°РµС‚ С€РёС„СЂР°С‚РѕСЂ Р’РµСЂРЅР°РјР° СЃ СѓРєР°Р·Р°РЅРЅС‹Рј РєР»СЋС‡РѕРј Рё Р°Р»С„Р°РІРёС‚РѕРј.
 std::unique_ptr<IEncoder> EncoderFactory::createVernamEncoder(const std::string& key, const std::string& language)
 {
 	
 	return std::make_unique<VernamEncoder>(key, GetAlphabet(language));
 }
 
-// Возвращает алфавит в зависимости от выбранного языка.
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ Р°Р»С„Р°РІРёС‚ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РІС‹Р±СЂР°РЅРЅРѕРіРѕ СЏР·С‹РєР°.
 std::string EncoderFactory::GetAlphabet(const std::string& language)
 {
 	std::string alphabet;
@@ -157,8 +149,8 @@ std::string EncoderFactory::GetAlphabet(const std::string& language)
 		return alphabet;
 	}
 	else if (language == "ru") {
-		alphabet = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"; 
+		alphabet = "Р°Р±РІРіРґРµС‘Р¶Р·РёР№РєР»РјРЅРѕРїСЂСЃС‚СѓС„С…С†С‡С€С‰СЉС‹СЊСЌСЋСЏРђР‘Р’Р“Р”Р•РЃР–Р—РР™РљР›РњРќРћРџР РЎРўРЈР¤РҐР¦Р§РЁР©РЄР«Р¬Р­Р®РЇ"; 
 		return alphabet;
 	}	
-	throw std::invalid_argument("Неподдерживаемый язык");
+	throw std::invalid_argument("РќРµРїРѕРґРґРµСЂР¶РёРІР°РµРјС‹Р№ СЏР·С‹Рє");
 }
