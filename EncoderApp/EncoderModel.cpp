@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "afxwin.h"
 #include "EncoderModel.h"
 
 
@@ -156,7 +157,7 @@ std::string EncoderFactory::GetAlphabet(const std::string& language)
 		return alphabet;
 	}
 	else if (language == "ru") {
-		alphabet = "אבגדהו¸זחטיךכלםמןנסעףפץצקרשתûü‎‏ÿÀÁÂÃÄÅ¨ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞ‗";
+		alphabet = "אבגדהו¸זחטיךכלםמןנסעףפץצקרשתûü‎‏ÿÀÁÂÃÄÅ¨ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞ‗"; 
 		return alphabet;
 	}	
 	throw std::invalid_argument("Íוןמההונזטגאולûי ÿחûך");
