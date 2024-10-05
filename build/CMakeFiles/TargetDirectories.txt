@@ -1,0 +1,3 @@
+D:/Programming/WorkProjects/EncoderApp/build/CMakeFiles/EncoderApp.dir
+D:/Programming/WorkProjects/EncoderApp/build/CMakeFiles/ALL_BUILD.dir
+D:/Programming/WorkProjects/EncoderApp/build/CMakeFiles/ZERO_CHECK.dir

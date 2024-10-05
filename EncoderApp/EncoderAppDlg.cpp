@@ -223,11 +223,11 @@ void CEncoderAppDlg::SetLanguageList()
 bool CEncoderAppDlg::IsFieldNotEmpty()
 {
 	CString message, key;
-	m_inputMessage_edit.GetWindowTextW(message);
+	m_inputMessage_edit.GetWindowText(message);
 	if (message.IsEmpty()) {
 		throw std::invalid_argument("Поле с сообщением не должно быть пустым");
 	}
-	m_inputKey_edit.GetWindowTextW(key);
+	m_inputKey_edit.GetWindowText(key);
 	if (key.IsEmpty()) {
 		throw std::invalid_argument("Поле с ключем не должно быть пустым");
 		return false;
@@ -239,7 +239,7 @@ bool CEncoderAppDlg::IsFieldNotEmpty()
 const std::string CEncoderAppDlg::GetInputMessage()
 {
 	CString inputMessage;
-	m_inputMessage_edit.GetWindowTextW(inputMessage);
+	m_inputMessage_edit.GetWindowText(inputMessage);
 	return std::string(CT2A(inputMessage));
 }
 
@@ -247,7 +247,7 @@ const std::string CEncoderAppDlg::GetInputMessage()
 const std::string CEncoderAppDlg::GetInputKey()
 {
 	CString inputKey;
-	m_inputKey_edit.GetWindowTextW(inputKey);
+	m_inputKey_edit.GetWindowText(inputKey);
 	return std::string(CT2A(inputKey));
 }
 
@@ -255,7 +255,7 @@ const std::string CEncoderAppDlg::GetInputKey()
 std::string CEncoderAppDlg::GetSelectedLanguage()
 {
 	CString selectedLanguage;
-	m_langCombobox.GetWindowTextW(selectedLanguage);
+	m_langCombobox.GetWindowText(selectedLanguage);
 	return std::string(CT2A(selectedLanguage));
 }
 
@@ -263,7 +263,7 @@ std::string CEncoderAppDlg::GetSelectedLanguage()
 const std::string CEncoderAppDlg::GetSelectedCipher()
 {
 	CString selectedCipher;
-	m_cipherCombobox.GetWindowTextW(selectedCipher);
+	m_cipherCombobox.GetWindowText(selectedCipher);
 	return std::string(CT2A(selectedCipher));
 }
 
@@ -282,5 +282,5 @@ const bool CEncoderAppDlg::IsDecoderSelected()
 // Устанавливает результат шифрования/дешифрования в текстовое поле вывода.
 void CEncoderAppDlg::SetOutputMessage(const std::string& outputMessage)
 {
-	m_outputMessage_edit.SetWindowTextW(CString(outputMessage.c_str()));
+	m_outputMessage_edit.SetWindowText(CString(outputMessage.c_str()));
 }
