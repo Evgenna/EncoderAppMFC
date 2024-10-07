@@ -38,7 +38,7 @@ private:
 
 class VernamEncoder : public IEncoder {
 public:
-	VernamEncoder(const std::string& key, const std::string& alphabet) : _key(key), _alphabet(alphabet) {}
+	VernamEncoder(const std::string& key, const std::string& alphabet);
 	std::string encode(const std::string& message) const override;
 	std::string decode(const std::string& message) const override;
 

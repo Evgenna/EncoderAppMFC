@@ -16,15 +16,24 @@ std::string CaesarEncoder::decode(const std::string& message) const
 // Преобразование сообщения с использованием сдвига (Кодирование и декодирование).
 std::string CaesarEncoder::transform(const std::string& message, int shift) const
 {
+	size_t mid = _alphabet.length() / 2;
+	std::string lowerAlphabet = _alphabet.substr(0, mid);
+	std::string upperAlphabet = _alphabet.substr(mid);
 	std::string encodedMessage;
 	for (char ch : message) {
-		if (_alphabet.find(ch) != std::string::npos) {
-			size_t index = _alphabet.find(ch);
-			index = (index + shift + _alphabet.size()) % _alphabet.size();
-			encodedMessage += _alphabet[index];
+		if (lowerAlphabet.find(ch) != std::string::npos) { // Проверяем, является ли символ буквой (нижний регистр)
+			size_t index = (lowerAlphabet.find(ch) + shift + lowerAlphabet.size()) % lowerAlphabet.size();
+			encodedMessage += lowerAlphabet[index];
+		}
+		else if (upperAlphabet.find(ch) != std::string::npos) { // Проверяем, является ли символ буквой (верхний регистр)
+			size_t index = (upperAlphabet.find(ch) + shift + upperAlphabet.size()) % upperAlphabet.size();
+			encodedMessage += upperAlphabet[index];
+		}
+		else if (isdigit(ch)) { // Шифрование цифр
+			encodedMessage += char((ch - '0' + shift + 10) % 10 + '0');
 		}
 		else {
-			encodedMessage += ch;
+			encodedMessage += ch; // Специальные символы остаются неизменными
 		}
 	}
 	return encodedMessage;
@@ -46,25 +55,54 @@ std::string VigenereEncoder::decode(const std::string& message) const
 std::string VigenereEncoder::transform(const std::string& message, bool encrypt) const
 {
 	std::string result;
-	size_t _key_length = _key.length();
-	for (size_t i = 0; i < message.length(); ++i) {
-		char c = message[i];
-		auto it_c = _alphabet.find(c);
-		if (it_c != std::string::npos) {
-			auto it_k = _alphabet.find(_key[i % _key_length]);
+	size_t keyLength = _key.length();
+	size_t keyIndex = 0;
 
-			
-			int shift = encrypt ? static_cast<int>(it_k) : -static_cast<int>(it_k);
+	size_t mid = _alphabet.length() / 2;
+	std::string lowerAlphabet = _alphabet.substr(0, mid);
+	std::string upperAlphabet = _alphabet.substr(mid);
 
-			
-			size_t pos = (it_c + shift + _alphabet.size()) % _alphabet.size();
-			result += _alphabet[pos];
+	for (char c : message) {
+		// Определяем, к какому алфавиту принадлежит символ
+		std::string alphabet;
+		if (lowerAlphabet.find(c) != std::string::npos) {
+			alphabet = lowerAlphabet;
+		}
+		else if (upperAlphabet.find(c) != std::string::npos) {
+			alphabet = upperAlphabet;
 		}
 		else {
+			// Небуквенные символы остаются неизменными
 			result += c;
+			continue;
 		}
+
+		// Определяем сдвиг на основе ключа
+		char keyChar = _key[keyIndex % keyLength];
+		int shift = alphabet.find(tolower(keyChar)); // Получаем сдвиг по ключу
+
+		// Шифруем или расшифровываем в зависимости от параметра
+		if (!encrypt) {
+			shift = -shift;
+		}
+
+		// Применяем сдвиг с учетом границ алфавита
+		size_t pos = (alphabet.find(c) + shift + alphabet.size()) % alphabet.size();
+		result += alphabet[pos];
+
+		// Увеличиваем индекс ключа только для букв
+		keyIndex++;
 	}
 	return result;
+}
+
+VernamEncoder::VernamEncoder(const std::string& key, const std::string& alphabet)
+{
+	_key = key;
+	_alphabet = alphabet;
+	for (char& c : _key) {
+		c = tolower(c);
+	}
 }
 
 // Кодирование сообщения с помощью шифра Вернама.

@@ -43,7 +43,6 @@ void EncoderController::SetEncoderContext(std::string& cipher, std::string& lang
         return;
     }
     throw std::invalid_argument("Неподдерживаемый шифр");
-    
 }
 
 // Обработчик события нажатия на кнопку "Рассчитать".
